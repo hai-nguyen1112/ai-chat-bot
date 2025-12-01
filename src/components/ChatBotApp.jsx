@@ -8,9 +8,10 @@ const ChatBotApp = ({
   activeChat,
   setActiveChat,
   onNewChat,
+  messages,
+  setMessages,
 }) => {
   const [inputValue, setInputValue] = useState('');
-  const [messages, setMessages] = useState(chats[0]?.messages || []);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -25,17 +26,23 @@ const ChatBotApp = ({
       timestamp: new Date().toLocaleTimeString(),
     };
 
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
-    setInputValue('');
+    if (!activeChat) {
+      onNewChat(inputValue);
+      setMessages([newMessage]);
+      setInputValue('');
+    } else {
+      const updatedMessages = [...messages, newMessage];
+      setMessages(updatedMessages);
+      setInputValue('');
 
-    const updatedChats = chats.map((chat) => {
-      if (chat.id === activeChat) {
-        return { ...chat, messages: updatedMessages };
-      }
-      return chat;
-    });
-    setChats(updatedChats);
+      const updatedChats = chats.map((chat) => {
+        if (chat.id === activeChat) {
+          return { ...chat, messages: updatedMessages };
+        }
+        return chat;
+      });
+      setChats(updatedChats);
+    }
   };
 
   const handleKeyDown = (e) => {

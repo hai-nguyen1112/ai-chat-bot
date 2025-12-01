@@ -7,6 +7,7 @@ const App = () => {
   const [isChatting, setIsChatting] = useState(false);
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
+  const [messages, setMessages] = useState([]);
 
   const handleStartChat = () => {
     setIsChatting(true);
@@ -20,13 +21,22 @@ const App = () => {
     setIsChatting(false);
   };
 
-  const createNewChat = () => {
+  const createNewChat = (initialMessage = '') => {
     const newChat = {
       id: uuidv4(),
       displayId: `Chat ${new Date().toLocaleDateString(
         'en-GB'
       )} ${new Date().toLocaleTimeString()}`,
-      messages: [],
+      messages:
+        initialMessage.length > 0
+          ? [
+              {
+                type: 'prompt',
+                text: initialMessage,
+                timestamp: new Date().toLocaleTimeString(),
+              },
+            ]
+          : [],
     };
 
     const updatedChats = [newChat, ...chats];
@@ -44,6 +54,8 @@ const App = () => {
           activeChat={activeChat}
           setActiveChat={setActiveChat}
           onNewChat={createNewChat}
+          messages={messages}
+          setMessages={setMessages}
         />
       ) : (
         <ChatBotStart onStartChat={handleStartChat} />
