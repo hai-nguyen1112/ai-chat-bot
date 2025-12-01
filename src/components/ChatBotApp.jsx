@@ -17,7 +17,7 @@ const ChatBotApp = ({
     setInputValue(e.target.value);
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (inputValue.trim() === '') return;
 
     const newMessage = {
@@ -26,12 +26,13 @@ const ChatBotApp = ({
       timestamp: new Date().toLocaleTimeString(),
     };
 
+    const updatedMessages = [...messages, newMessage];
+
     if (!activeChat) {
       onNewChat(inputValue);
-      setMessages([newMessage]);
+      setMessages(updatedMessages);
       setInputValue('');
     } else {
-      const updatedMessages = [...messages, newMessage];
       setMessages(updatedMessages);
       setInputValue('');
 
@@ -43,6 +44,32 @@ const ChatBotApp = ({
       });
       setChats(updatedChats);
     }
+
+    const response = await fetch('http://localhost:3000/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: inputValue }),
+    });
+
+    const data = await response.json();
+    const chatResponse = data.choices[0].message.content.trim();
+
+    const newResponse = {
+      type: 'response',
+      text: chatResponse,
+      timestamp: new Date().toLocaleTimeString(),
+    };
+
+    const updatedMessagesWithResponse = [...updatedMessages, newResponse];
+    setMessages(updatedMessagesWithResponse);
+
+    setChats((prevChats) =>
+      prevChats.map((chat) =>
+        chat.id === activeChat
+          ? { ...chat, messages: updatedMessagesWithResponse }
+          : chat
+      )
+    );
   };
 
   const handleKeyDown = (e) => {
