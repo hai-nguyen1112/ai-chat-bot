@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './ChatBotApp.css';
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
 
 const ChatBotApp = ({
   onGoBack,
@@ -13,7 +15,13 @@ const ChatBotApp = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const chatEndRef = useRef(null);
+
+  const handleEmojiSelect = (emoji) => {
+    setInputValue((prev) => prev + emoji.native);
+    setShowEmojiPicker(false);
+  };
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -158,7 +166,15 @@ const ChatBotApp = ({
           <div ref={chatEndRef}></div>
         </div>
         <form className="msg-form" onSubmit={(e) => e.preventDefault()}>
-          <i className="fa-solid fa-face-smile emoji"></i>
+          <i
+            className="fa-solid fa-face-smile emoji"
+            onClick={() => setShowEmojiPicker((prev) => !prev)}
+          ></i>
+          {showEmojiPicker ? (
+            <div className="picker">
+              <Picker data={data} onEmojiSelect={handleEmojiSelect} />
+            </div>
+          ) : null}
           <input
             type="text"
             className="msg-input"
@@ -167,6 +183,7 @@ const ChatBotApp = ({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             disabled={isTyping}
+            onFocus={() => setShowEmojiPicker(false)}
           />
           <i
             className={`fa-solid fa-paper-plane ${isTyping ? 'disabled' : ''}`}
