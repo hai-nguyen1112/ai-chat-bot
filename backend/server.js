@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import axios from 'axios';
 
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -15,6 +16,10 @@ dotenv.config({ path: join(__dirname, '.env') });
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
 
 // Proxy route (frontend -> backend -> OpenAI)
 app.post('/api/chat', async (req, res) => {
@@ -45,3 +50,12 @@ app.post('/api/chat', async (req, res) => {
 app.listen(3000, () =>
   console.log('Backend server running at http://localhost:3000')
 );
+
+// Self-ping to prevent cold starts (put AFTER app.listen)
+if (process.env.NODE_ENV === 'production') {
+  setInterval(() => {
+    axios
+      .get(`${process.env.APP_URL}/health`)
+      .catch((err) => console.log('Ping failed:', err.message));
+  }, 14 * 60 * 1000); // Every 14 minutes
+}
