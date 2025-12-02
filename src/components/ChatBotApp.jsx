@@ -18,6 +18,7 @@ const ChatBotApp = ({
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showChatList, setShowChatList] = useState(false);
   const chatEndRef = useRef(null);
+  const chatListRef = useRef(null);
 
   useEffect(() => {
     if (activeChat) {
@@ -25,6 +26,20 @@ const ChatBotApp = ({
       setMessages(storedMessages);
     }
   }, [activeChat, setMessages]);
+
+  // Close chat list on click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (chatListRef.current && !chatListRef.current.contains(event.target)) {
+        setShowChatList(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleEmojiSelect = (emoji) => {
     setInputValue((prev) => prev + emoji.native);
@@ -134,7 +149,10 @@ const ChatBotApp = ({
 
   return (
     <div className="chat-app">
-      <div className={`chat-list ${showChatList ? 'show' : ''}`}>
+      <div
+        ref={chatListRef}
+        className={`chat-list ${showChatList ? 'show' : ''}`}
+      >
         <div className="chat-list-header">
           <h2>Chat List</h2>
           <i
