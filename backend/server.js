@@ -30,7 +30,6 @@ app.post('/api/chat', async (req, res) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // eslint-disable-next-line no-undef
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
@@ -48,7 +47,7 @@ app.post('/api/chat', async (req, res) => {
 });
 
 app.listen(3000, () =>
-  console.log('Backend server running at http://localhost:3000')
+  console.log(`Backend server running at ${process.env.APP_URL}`)
 );
 
 // Self-ping to prevent cold starts (put AFTER app.listen)
