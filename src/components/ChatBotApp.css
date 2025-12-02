@@ -34,6 +34,10 @@
   cursor: pointer;
 }
 
+.close-list {
+  display: none;
+}
+
 .chat-list-item {
   width: 100%;
   height: 6rem;
@@ -204,4 +208,58 @@
 
 .msg-input:focus::placeholder {
   opacity: 0;
+}
+
+@media (max-width: 900px) {
+  .chat-app {
+    flex-direction: column;
+  }
+
+  .chat-list {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    transform: translateX(-100%);
+    z-index: 1000;
+  }
+
+  .chat-menu {
+    padding-left: 1rem;
+  }
+
+  .chat-list.show {
+    transform: translateX(0);
+  }
+
+  .close-list {
+    display: inline-block;
+  }
+
+  .chat-window {
+    width: 100%;
+  }
+
+  .chat-title h3 {
+    padding-left: 5rem;
+  }
+
+  .chat-title i.bx-menu {
+    font-size: 3rem;
+    color: #fff;
+    display: block;
+    cursor: pointer;
+    position: absolute;
+  }
+}
+
+@media (max-width: 500px) {
+  .chat-list {
+    width: 60%;
+  }
+
+  .picker {
+    left: 1rem;
+  }
 }
