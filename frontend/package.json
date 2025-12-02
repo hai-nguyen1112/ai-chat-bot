@@ -10,7 +10,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "vercel-build": "npm install --legacy-peer-deps && npm run build"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",
