@@ -18,6 +18,13 @@ const ChatBotApp = ({
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const chatEndRef = useRef(null);
 
+  useEffect(() => {
+    if (activeChat) {
+      const storedMessages = JSON.parse(localStorage.getItem(activeChat)) || [];
+      setMessages(storedMessages);
+    }
+  }, [activeChat, setMessages]);
+
   const handleEmojiSelect = (emoji) => {
     setInputValue((prev) => prev + emoji.native);
     setShowEmojiPicker(false);
@@ -41,9 +48,11 @@ const ChatBotApp = ({
     if (!activeChat) {
       onNewChat(inputValue);
       setMessages(updatedMessages);
+      localStorage.setItem(activeChat, JSON.stringify(updatedMessages));
       setInputValue('');
     } else {
       setMessages(updatedMessages);
+      localStorage.setItem(activeChat, JSON.stringify(updatedMessages));
       setInputValue('');
 
       const updatedChats = chats.map((chat) => {
@@ -53,6 +62,7 @@ const ChatBotApp = ({
         return chat;
       });
       setChats(updatedChats);
+      localStorage.setItem('chats', JSON.stringify(updatedChats));
     }
 
     setIsTyping(true);
@@ -73,14 +83,20 @@ const ChatBotApp = ({
 
     const updatedMessagesWithResponse = [...updatedMessages, newResponse];
     setMessages(updatedMessagesWithResponse);
+    localStorage.setItem(
+      activeChat,
+      JSON.stringify(updatedMessagesWithResponse)
+    );
 
-    setChats((prevChats) =>
-      prevChats.map((chat) =>
+    setChats((prevChats) => {
+      let updatedChats = prevChats.map((chat) =>
         chat.id === activeChat
           ? { ...chat, messages: updatedMessagesWithResponse }
           : chat
-      )
-    );
+      );
+      localStorage.setItem('chats', JSON.stringify(updatedChats));
+      return updatedChats;
+    });
 
     setIsTyping(false);
   };
@@ -101,6 +117,8 @@ const ChatBotApp = ({
   const handleDeleteChat = (id) => {
     const updatedChats = chats.filter((chat) => chat.id !== id);
     setChats(updatedChats);
+    localStorage.setItem('chats', JSON.stringify(updatedChats));
+    localStorage.removeItem(id);
 
     if (id === activeChat) {
       const newActiveChat = updatedChats.length > 0 ? updatedChats[0].id : null;
