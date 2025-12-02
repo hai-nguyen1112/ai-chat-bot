@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './ChatBotApp.css';
 
 const ChatBotApp = ({
@@ -12,6 +12,8 @@ const ChatBotApp = ({
   setMessages,
 }) => {
   const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const chatEndRef = useRef(null);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -45,6 +47,7 @@ const ChatBotApp = ({
       setChats(updatedChats);
     }
 
+    setIsTyping(true);
     const response = await fetch('http://localhost:3000/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -70,6 +73,8 @@ const ChatBotApp = ({
           : chat
       )
     );
+
+    setIsTyping(false);
   };
 
   const handleKeyDown = (e) => {
@@ -94,6 +99,10 @@ const ChatBotApp = ({
       handleSelectChat(newActiveChat);
     }
   };
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   return (
     <div className="chat-app">
@@ -145,7 +154,8 @@ const ChatBotApp = ({
               </div>
             );
           })}
-          <div className="typing">Typing...</div>
+          {isTyping && <div className="typing">Typing...</div>}
+          <div ref={chatEndRef}></div>
         </div>
         <form className="msg-form" onSubmit={(e) => e.preventDefault()}>
           <i className="fa-solid fa-face-smile emoji"></i>
@@ -156,8 +166,12 @@ const ChatBotApp = ({
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
+            disabled={isTyping}
           />
-          <i className="fa-solid fa-paper-plane" onClick={sendMessage}></i>
+          <i
+            className={`fa-solid fa-paper-plane ${isTyping ? 'disabled' : ''}`}
+            onClick={sendMessage}
+          ></i>
         </form>
       </div>
     </div>

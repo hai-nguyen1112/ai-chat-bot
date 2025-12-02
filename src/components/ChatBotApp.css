@@ -104,6 +104,11 @@
   display: flex;
   flex-direction: column;
   row-gap: 4rem;
+  overflow-y: auto;
+}
+
+.chat::-webkit-scrollbar {
+  display: none;
 }
 
 .prompt,
@@ -142,11 +147,12 @@
   font-size: 1.6rem;
   color: #7b8ebc;
   margin-top: auto;
+  margin-bottom: -3rem;
 }
 
 .msg-form {
   width: 100%;
-  height: 10rem;
+  min-height: 10rem;
   background-color: #161c2c;
   display: flex;
   align-items: center;
@@ -158,6 +164,10 @@
   font-size: 2.5rem;
   color: #7b8ebc;
   cursor: pointer;
+}
+
+.msg-form i.disabled {
+  cursor: not-allowed;
 }
 
 .emoji {
@@ -173,6 +183,10 @@
   border: none;
   font-size: 1.7rem;
   color: #7b8ebc;
+}
+
+.msg-input:disabled {
+  cursor: not-allowed;
 }
 
 .msg-input::placeholder {
