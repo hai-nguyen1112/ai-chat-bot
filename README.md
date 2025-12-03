@@ -1,16 +1,39 @@
-# React + Vite
+## AI Chat Bot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack AI-powered chat application built with React, NodeJS and OpenAI API.
 
-Currently, two official plugins are available:
+Demo: https://ai-chat-bot-hai-nguyen.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Developed a responsive chat application using React, managing state with hooks for clean and scalable architecture.
+- Powered real-time AI conversations using OpenAI API with streaming responses.
+- Managed chat history and session state locally, with optional support for future expansion to a database.
+- Built a responsive UI with Flexbox and CSS Grid, optimized for mobile and desktop.
+- Implemented features like emoji picker, typing indicators, and scroll-to-bottom for a smooth UX.
+- Ensured accessibility and usability with keyboard navigation, focus management, and responsive input handling.
+- Optimized performance by preventing unnecessary re-renders.
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Run The Backend
 
-## Expanding the ESLint configuration
+```bash
+cd backend
+npm install
+npm run server
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The backend server should be up and running at http://localhost:3000
+
+Open another termial to run the frontend.
+
+### Run The Frontend
+
+```bash
+cd frontend
+npm install --legacy-peer-deps
+npm run dev
+```
+
+Important Note: The installation command for the UI needs the flag --legacy-peer-deps because React 19 hasn't supported emoji-mart library yet.
+
+The UI should be up and running at http://localhost:5173
