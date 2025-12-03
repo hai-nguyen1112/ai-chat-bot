@@ -1,7 +1,6 @@
 .chat-app {
   width: 100%;
-  height: 100dvh;
-  height: 100vh; /* fallback */
+  height: 100%;
   display: flex;
 }
 
