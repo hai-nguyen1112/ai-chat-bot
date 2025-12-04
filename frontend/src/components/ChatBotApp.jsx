@@ -85,7 +85,12 @@ const ChatBotApp = ({
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: inputValue }),
+      body: JSON.stringify({
+        messages: updatedMessages.map((m) => ({
+          role: m.typ === 'prompt' ? 'user' : 'assistant',
+          content: m.text,
+        })),
+      }),
     });
 
     const data = await response.json();

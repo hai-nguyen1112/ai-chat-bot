@@ -22,7 +22,7 @@ app.get('/health', (req, res) => {
 
 // Proxy route (frontend -> backend -> OpenAI)
 app.post('/api/chat', async (req, res) => {
-  const { message } = req.body;
+  const { messages } = req.body;
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -32,8 +32,8 @@ app.post('/api/chat', async (req, res) => {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: message }],
+        model: 'gpt-4o-mini',
+        messages,
       }),
     });
 
