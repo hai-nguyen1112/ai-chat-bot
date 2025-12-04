@@ -156,11 +156,15 @@ const ChatBotApp = ({
         <div className="chat-list-header">
           <h2>Chat List</h2>
           <i
-            className="bx bx-edit-alt new-chat"
-            onClick={() => {
-              onNewChat();
-              setMessages([]);
-            }}
+            className={`bx bx-edit-alt new-chat ${isTyping ? 'disabled' : ''}`}
+            onClick={
+              isTyping
+                ? undefined
+                : () => {
+                    onNewChat();
+                    setMessages([]);
+                  }
+            }
           ></i>
           <i
             className="bx bx-x-circle close-list"
@@ -174,15 +178,19 @@ const ChatBotApp = ({
               className={`chat-list-item ${
                 chat.id === activeChat ? 'active' : ''
               }`}
-              onClick={() => handleSelectChat(chat.id)}
+              onClick={isTyping ? undefined : () => handleSelectChat(chat.id)}
             >
               <h4>{chat.displayId}</h4>
               <i
-                className="bx bx-x-circle"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteChat(chat.id);
-                }}
+                className={`bx bx-x-circle ${isTyping ? 'disabled' : ''}`}
+                onClick={
+                  isTyping
+                    ? undefined
+                    : (e) => {
+                        e.stopPropagation();
+                        handleDeleteChat(chat.id);
+                      }
+                }
               ></i>
             </div>
           );
@@ -195,7 +203,10 @@ const ChatBotApp = ({
             className="bx bx-menu chat-menu"
             onClick={() => setShowChatList(true)}
           ></i>
-          <i className="bx bx-arrow-back arrow" onClick={onGoBack}></i>
+          <i
+            className={`bx bx-arrow-back arrow ${isTyping ? 'disabled' : ''}`}
+            onClick={isTyping ? undefined : onGoBack}
+          ></i>
         </div>
         <div className="chat">
           {messages.map((message, index) => {
@@ -213,8 +224,12 @@ const ChatBotApp = ({
         </div>
         <form className="msg-form" onSubmit={(e) => e.preventDefault()}>
           <i
-            className="fa-solid fa-face-smile emoji"
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
+            className={`fa-solid fa-face-smile emoji ${
+              isTyping ? 'disabled' : ''
+            }`}
+            onClick={
+              isTyping ? undefined : () => setShowEmojiPicker((prev) => !prev)
+            }
           ></i>
           {showEmojiPicker ? (
             <div className="picker">
@@ -233,7 +248,7 @@ const ChatBotApp = ({
           />
           <i
             className={`fa-solid fa-paper-plane ${isTyping ? 'disabled' : ''}`}
-            onClick={sendMessage}
+            onClick={isTyping ? undefined : sendMessage}
           ></i>
         </form>
       </div>

@@ -35,6 +35,10 @@
   cursor: pointer;
 }
 
+.chat-list-header i.disabled {
+  cursor: not-allowed;
+}
+
 .close-list {
   display: none;
 }
@@ -70,6 +74,10 @@
   cursor: pointer;
 }
 
+.chat-list-item i.disabled {
+  cursor: not-allowed;
+}
+
 .chat-window {
   width: 70%;
   height: 100%;
@@ -93,6 +101,10 @@
   text-transform: uppercase;
   color: #fff;
   letter-spacing: 0.1rem;
+}
+
+.chat-title i.disabled {
+  cursor: not-allowed;
 }
 
 .arrow {

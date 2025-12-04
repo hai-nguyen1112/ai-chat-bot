@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import axios from 'axios';
 
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -49,12 +48,3 @@ app.post('/api/chat', async (req, res) => {
 app.listen(3000, () =>
   console.log(`Backend server running at ${process.env.APP_URL}`)
 );
-
-// Self-ping to prevent cold starts (put AFTER app.listen)
-if (process.env.NODE_ENV === 'production') {
-  setInterval(() => {
-    axios
-      .get(`${process.env.APP_URL}/health`)
-      .catch((err) => console.log('Ping failed:', err.message));
-  }, 14 * 60 * 1000); // Every 14 minutes
-}
